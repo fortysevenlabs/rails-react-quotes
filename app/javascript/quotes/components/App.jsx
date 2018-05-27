@@ -15,15 +15,19 @@ const App = (props) => (
   // Revisit how this feels in traditional function
   // Setup Router
   // Router will render components depending on the path user types into browser
+
   // In this setup, we have only one component. How would more components look?
   // Router, Route are Higher-Order Components ()
   // Components Rendered by Route will get three objects as props: location, match, history
   // HOC will get three objects as props: location, match, history
-  <Router>
+
+  // Don't understand the 'render' line in this stateless functional component
+  <Router props={props.startingQuoteId}>
     <div>
       <Route 
         path='/'
-        component={QuotesDisplay}
+        startingQuoteId={props.startingQuoteId}
+        render={(routeProps) => <QuotesDisplay {...props} {...routeProps} />}
       />
     </div>
   </Router>

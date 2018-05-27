@@ -32,7 +32,7 @@ class QuotesDisplay extends React.Component {
       this.quoteId = Number(this.qsParams.quote);
     } else {
       // if not set, lets use the beginning page
-      this.quoteId = 1;
+      this.quoteId = this.props.startingQuoteId;
       // update URL to be /?quotes=1
       this.props.history.push(`/?quote=${this.quoteId}`);
     }
