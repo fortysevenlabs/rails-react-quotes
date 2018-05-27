@@ -60,18 +60,15 @@ class QuotesDisplay extends React.Component {
   //RENDER
 
   render(){
-    console.log(this.state);
-    const nextQuoteId = Number(this.state.quote.id) + 1;
-    const prevQuoteId = Number(this.state.quote.id) - 1;
-    console.log("current: ", this.state.quote.id);
-    console.log("next: ", nextQuoteId);
-    console.log("next: ", prevQuoteId);
+    const quote = this.state.quote;
+    const nextQuoteId = quote.next_id;
+    const prevQuoteId = quote.prev_id;
 
     return (
       <div>
-        <Link to={`/?quote=${prevQuoteId}`}> Previous </Link>
+        {prevQuoteId && <Link to={`/?quote=${prevQuoteId}`}> Previous </Link>}
         <br></br>
-        <Link to={`/?quote=${nextQuoteId}`}> Next </Link>
+        {nextQuoteId && <Link to={`/?quote=${nextQuoteId}`}> Next </Link>}
         <p> {this.state.quote.text} </p>
         <p> {this.state.quote.author} </p>
       </div>
