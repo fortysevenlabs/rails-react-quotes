@@ -1,18 +1,22 @@
 import React from 'react';
 // Haven't used React Router yet
-// Link is a HOC
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 // React Router doesn't support query string parsing anymore because of different parsing implementation expectations
 // So, we'll use this external library to parse the query string
 import queryString from 'query-string';
 // library for AJAX requests, library not really needed - could use traditional method?
 import axios from 'axios';
 
+import QuoteText from './QuoteText';
+import QuoteNavigation from './QuoteNavigation';
+import QuoteFooter from './QuoteFooter';
+
 class QuotesDisplay extends React.Component {
   constructor() {
     super();
     this.state = {
-      quote: {}
+      quote: {},
+      fireRedirect: false
     };
   }
 
@@ -23,6 +27,7 @@ class QuotesDisplay extends React.Component {
       this.setState({ quote: response.data });
     }).catch(error => {
       console.error(error);
+      this.setState({ fireRedirect: true });
     });
   }
   
@@ -62,15 +67,18 @@ class QuotesDisplay extends React.Component {
   render(){
     const quote = this.state.quote;
     const nextQuoteId = quote.next_id;
-    const prevQuoteId = quote.prev_id;
+    const previousQuoteId = quote.prev_id;
 
     return (
       <div>
-        {prevQuoteId && <Link to={`/?quote=${prevQuoteId}`}> Previous </Link>}
-        <br></br>
-        {nextQuoteId && <Link to={`/?quote=${nextQuoteId}`}> Next </Link>}
-        <p> {this.state.quote.text} </p>
-        <p> {this.state.quote.author} </p>
+        <div className='quote-container'>
+            {this.state.fireRedirect && <Redirect to={'/'} /> }
+            {previousQuoteId && <QuoteNavigation direction='previous' otherQuoteId={previousQuoteId} /> }
+            <QuoteText quote={this.state.quote} />
+            { nextQuoteId && <QuoteNavigation direction='next' otherQuoteId={nextQuoteId} /> }
+        </div>
+          { this.state.quote.id !== parseInt(this.props.startingQuoteId, 10) &&
+          <QuoteFooter startingQuoteId={this.props.startingQuoteId} /> }
       </div>
     )
   }
